@@ -6,6 +6,9 @@ public class Grafo {
     private Vertice[] vertices;
     private boolean[] visited;
     private boolean[][] puentes;
+
+    private int numNodosActivos;
+
     //Constructor
     public Grafo() {
         this.numNodos = 0;
@@ -13,9 +16,10 @@ public class Grafo {
         visited = new boolean[1];
         vertices = new Vertice[1];
         puentes = new boolean[1][1];
+        numNodosActivos = 0;
     }
-    // setters, Getters
 
+    // setters, Getters
     public Vertice[] getVertices() {
         return vertices;
     }
@@ -59,6 +63,7 @@ public class Grafo {
             }
         } return -1;
     }
+
     public void agregarVertice(int id, String userName) {
         Vertice newVertice = new Vertice(id, userName);
         if (isEmpty()) {
@@ -66,11 +71,14 @@ public class Grafo {
             newVertice.setNumVertice(0);
             getMatrizAd()[0][0] = 0;
             visited[0] = false;
+            numNodosActivos ++;
+            numNodos++;
         } else {
             int space = searchSpace();
             if (space != -1) {
                 vertices[space] = newVertice;
                 newVertice.setNumVertice(space);
+                numNodosActivos++;
             } else {
                 Vertice[] newVertices = new Vertice[numNodos + 1];
                 int[][] newMatrizAdy = new int[numNodos + 1][numNodos + 1];
@@ -92,10 +100,13 @@ public class Grafo {
                 setVisited(new boolean[numNodos + 1]);
                 visited[numNodos] = false;
                 puentes = new boolean[numNodos + 1][numNodos + 1];
+                numNodos++;
+                numNodosActivos++;
             }
 
-        } numNodos++;
+        }
     }
+
     public void eliminarVertice(Vertice vertice) {
         if (isEmpty()) {
             System.out.println("No hay ningún usuario en la red.");
@@ -105,10 +116,11 @@ public class Grafo {
             for (int i = 0; i < numNodos; i++) {
                 getMatrizAd()[numVertice][i] = 0;
                 getMatrizAd()[i][numVertice] = 0;
-            } setNumNodos(getNumNodos() - 1);
+            } numNodosActivos--;
 
         }
     }
+
     public void agregarArco(int n1,int n2, int peso){
         if (getVertices()[n1] != null && getVertices()[n2] != null && n1 != n2) {
             MatrizAd[n1][n2] = peso;
@@ -117,14 +129,11 @@ public class Grafo {
 
     }
 
-    //    public void agregarArco(int n1, int n2){
-//        MatrizAd[n1][n2]=1;
-//        MatrizAd[n2][n1]=1;
-//    }
     public void eliminarArco(int n1,int n2){
         MatrizAd[n1][n2] = 0;
         MatrizAd[n2][n1] = 0;
     }
+
     public boolean Arco(int n1, int n2){
         return MatrizAd[n1][n2] != 0;
     }
@@ -139,21 +148,43 @@ public class Grafo {
         } return cantidadVertices;
 
     }
-//
-//    public int[] partialDFS(int numVertice1, int numVertice2) {
-//        System.out.println(vertices[numVertice1].getId());
-//        visited[numVertice1] = true;
-//        int[] lista = new int[numNodos];
-//        for (int i = 0; i < numNodos; i++) {
-//            if (getMatrizAd()[numVertice1][i] != 0 && !visited[i]) {
-//                recursiveDFS(i, numVertice2);
-//            }
-//        } return lista;
-//    }
 
-    public int BFS(Vertice startingVertice, int cantidadVertices) {
-        return cantidadVertices;
+    public int BFS(Vertice startingVertice) {
+        int contador = 0;
+        Queue queue = new Queue();
+        queue.enqueue(startingVertice);
+        visited[startingVertice.getNumVertice()] = true;
+        while (queue.getHead() != null) {
+            visited[queue.getHead().getElement().getNumVertice()] = true;
+            System.out.println(queue.getHead().getElement().getId());
+            for (int j = 0; j < numNodos; j++) {
+                if (MatrizAd[queue.getHead().getElement().getNumVertice()][j] != 0 && !visited[j]) {
+                    queue.enqueue(vertices[j]);
+                    visited[j] = true;
+                }
+            } contador++;
+            queue.dispatch();
+        }
+        return contador;
     }
+
+    public int numIslasBFS() {
+        for (int i = 0; i < numNodos; i++){
+            visited[i] = false;
+        }
+        int contador = 0;
+        while (!todosVisitados()) {
+            int i = notVisited();
+            if (vertices[i] != null) {
+                BFS(vertices[i]);
+                contador++;
+            } else {
+                visited[i] = true;
+            }
+        }
+        return contador;
+    }
+
     public boolean todosVisitados() {
         int contador = 0;
         for (int i = 0; i < numNodos; i++) {
@@ -162,6 +193,7 @@ public class Grafo {
             }
         } return contador == numNodos;
     }
+
     public int notVisited() {
         int i = 0;
         while (getVisited()[i] && i < numNodos) {
@@ -172,18 +204,24 @@ public class Grafo {
             return i;
         }
     }
+
     public int numIslas() {
         for (int i = 0; i < numNodos; i++) {
             visited[i] = false;
         }
-        int contador = 1;
+        int contador = 0;
         while (!todosVisitados()) {
             int i = notVisited();
-            recursiveDFS(i, 1);
-            contador++;
+            if (vertices[i] != null) {
+                recursiveDFS(i, 1);
+                contador++;
+            } else {
+                visited[i] = true;
+            }
         }
         return contador;
     }
+
     public boolean esPuente(int numVertice1, int numVertice2) {
 
         if (Arco(numVertice1, numVertice2)) {
@@ -204,5 +242,17 @@ public class Grafo {
             System.out.println("Estos usuarios no son amigos.");
             return false;
         }
+    }
+
+    public Vertice findVertice(String username) {
+        for (int i = 0; i < numNodos; i++) {
+            if (vertices[i] != null) {
+                if (vertices[i].getUsername() == username) {
+                    return vertices[i];
+                }
+            }
+        }
+        System.out.println("No pudimos encontrar ningún usuario con este nombre.");
+        return null;
     }
 }
