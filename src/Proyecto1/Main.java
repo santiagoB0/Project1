@@ -32,7 +32,7 @@ public class Main {
         System.out.println(a);
         Funciones funciones = new Funciones();
         funciones.printText(grafoPrueba);
-        Grafo newGrafo = funciones.leerText("//Users//abricenop//IdeaProjects//Project1//src//Test//grafo.txt", "//Users//abricenop//IdeaProjects//Project1//src//Test//amistades.txt");
+        Grafo newGrafo = funciones.leerText("//Users//abricenop//IdeaProjects//Project1//src//Test//grafo.txt");
         String name = newGrafo.getVertices()[0].getUsername();
         System.out.println(name);
         int numIslas = newGrafo.numIslas();
