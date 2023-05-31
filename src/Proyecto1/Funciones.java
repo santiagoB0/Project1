@@ -23,7 +23,7 @@ public class Funciones {
                     usuarios += grafo.getVertices()[i].getId() + "," + grafo.getVertices()[i].getUsername() + "\n";
                     for (int j = 0; j < grafo.getNumNodos(); j++) {
                         if (grafo.getMatrizAd()[i][j] != 0 && grafo.getVertices()[j] != null && !arcosVisited[i][j]) {
-                            amistades += grafo.getVertices()[i].getId() + "," + grafo.getVertices()[j].getId() + "," + grafo.getMatrizAd()[i][j] + "\n";
+                            amistades += grafo.getVertices()[i].getUsername() + "," + grafo.getVertices()[j].getUsername() + "," + grafo.getMatrizAd()[i][j] + "\n";
                             arcosVisited[i][j] = true;
                             arcosVisited[j][i] = true;
                         }
@@ -44,28 +44,48 @@ public class Funciones {
         }
     }
 
-//    public Grafo leerText(String inpath) {
-//        Grafo neGrafo = new Grafo();
-//        String line;
-//        String datos = "";
-//        String path = inpath;
-//        File file = new File(path);
-//        try {
-//            if (!file.exists()) {
-//                file.createNewFile();
-//            } else {
-//                FileReader fr = new FileReader(file);
-//                BufferedReader br = new BufferedReader(fr);
-//                while ((line = br.readLine()) != null) {
-//                    if (!line.isEmpty()) {
-//                        datos += line + "\n";
-//                    }
-//                } if (!"".equals(datos)) {
-//                    String[] textSplit =
-//                }
-//            }
-//        } catch(Exception err) {
-//
-//        }
-//    }
+    public Grafo leerText(String inPath1, String inPath2) {
+        Grafo newGrafo = new Grafo();
+        String line1;
+        String line2;
+        String usuarios = "";
+        String amistades = "";
+        File file1 = new File(inPath1);
+        File file2 = new File(inPath2);
+        try {
+            if (!file1.exists() || !file2.exists()) {
+                file1.createNewFile();
+                file2.createNewFile();
+            } else {
+                FileReader fr1 = new FileReader(file1);
+                BufferedReader br1 = new BufferedReader(fr1);
+                FileReader fr2 = new FileReader(file2);
+                BufferedReader br2 = new BufferedReader(fr2);
+                while ((line1 = br1.readLine()) != null) {
+                    if (!line1.isEmpty()) {
+                        usuarios += line1 + "\n";
+                    }
+                    while ((line2 = br2.readLine()) != null) {
+                        amistades += line2 + "\n";
+                    }
+                } if (!"".equals(usuarios)) {
+                    String[] usuariosSplit = usuarios.split("\n");
+                    for (int i = 0; i < usuariosSplit.length; i++) {
+                        String[] user = usuariosSplit[i].split(",");
+                        newGrafo.agregarVertice(Integer.parseInt(user[0]), user[1]);
+                    }
+                } if (!"".equals(amistades)) {
+                    String[] amistadesSplit = amistades.split("\n");
+                    for (int i = 0; i < amistadesSplit.length; i++) {
+                        String[] arco = amistadesSplit[i].split(",");
+                        newGrafo.agregarArco(newGrafo.findVertice(arco[0]).getNumVertice(), newGrafo.findVertice(arco[1]).getNumVertice(), Integer.parseInt(arco[2]));
+                    }
+                }
+            }
+            JOptionPane.showMessageDialog(null, "Lectura exitosa.");
+        } catch(Exception err) {
+            JOptionPane.showMessageDialog(null, "Un error ocurrió.");
+        }
+        return newGrafo;
+    }
 }

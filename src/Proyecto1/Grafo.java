@@ -247,7 +247,7 @@ public class Grafo {
     public Vertice findVertice(String username) {
         for (int i = 0; i < numNodos; i++) {
             if (vertices[i] != null) {
-                if (vertices[i].getUsername() == username) {
+                if (vertices[i].getUsername().equals(username)) {
                     return vertices[i];
                 }
             }
