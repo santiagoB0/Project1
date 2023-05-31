@@ -28,6 +28,8 @@ public class Main {
 //        int numIslas = grafoPrueba.numIslas();
 //        System.out.println("Cantidad Vertices " + bfs);
         System.out.println("Islas " + cantidadIslas);
+        Funciones funciones = new Funciones();
+        funciones.printText(grafoPrueba);
 //        System.out.println(grafoPrueba.esPuente(5, 6));
 //        grafoPrueba.agregarVertice(101, "santiago");
 //        grafoPrueba.agregarVertice(102, "Casamentera");
