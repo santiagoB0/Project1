@@ -30,7 +30,7 @@ public class Main {
 //        System.out.println("Islas " + cantidadIslas);
         String a = grafoPrueba.findVertice("a").getUsername();
         System.out.println(a);
-        Funciones funciones = new Funciones();
+        TxtFile funciones = new TxtFile();
         funciones.printFileViaExplorer(grafoPrueba);
         System.out.println("Flag");
         Grafo newGrafo = funciones.openFileViaExplorer();

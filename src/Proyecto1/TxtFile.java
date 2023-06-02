@@ -5,9 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class Funciones {
+public class TxtFile {
 
     public void printText(String inPath, Grafo grafo) {
         String usuarios = "";
