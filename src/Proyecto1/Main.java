@@ -15,7 +15,7 @@ public class Main {
         grafoPrueba.agregarArco(1, 3, 3);
         grafoPrueba.agregarArco(1, 4, 3);
         grafoPrueba.agregarArco(1, 5, 4);
-        grafoPrueba.eliminarVertice(grafoPrueba.getVertices()[1]);
+//        grafoPrueba.eliminarVertice(grafoPrueba.getVertices()[1]);
         grafoPrueba.agregarArco(0, 6, 4);
         grafoPrueba.agregarArco(5, 6, 4);
         grafoPrueba.agregarArco(0, 1, 4);
@@ -31,8 +31,9 @@ public class Main {
         String a = grafoPrueba.findVertice("a").getUsername();
         System.out.println(a);
         Funciones funciones = new Funciones();
-        funciones.printText(grafoPrueba);
-        Grafo newGrafo = funciones.leerText("//Users//abricenop//IdeaProjects//Project1//src//Test//grafo.txt");
+        funciones.printFileViaExplorer(grafoPrueba);
+        System.out.println("Flag");
+        Grafo newGrafo = funciones.openFileViaExplorer();
         String name = newGrafo.getVertices()[0].getUsername();
         System.out.println(name);
         int numIslas = newGrafo.numIslas();

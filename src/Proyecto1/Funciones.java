@@ -4,11 +4,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
-import javax.swing.JOptionPane;
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Funciones {
 
-    public void printText(Grafo grafo) {
+    public void printText(String inPath, Grafo grafo) {
         String usuarios = "";
         String amistades = "";
         boolean[][] arcosVisited = new boolean[grafo.getNumNodos()][grafo.getNumNodos()];
@@ -32,7 +33,7 @@ public class Funciones {
             }
         }
         try {
-            PrintWriter pwUsuarios = new PrintWriter("//Users//abricenop//IdeaProjects//Project1//src//Test//grafo.txt");
+            PrintWriter pwUsuarios = new PrintWriter(inPath);
             pwUsuarios.print(usuarios);
             pwUsuarios.append(amistades);
             pwUsuarios.close();
@@ -74,5 +75,45 @@ public class Funciones {
             JOptionPane.showMessageDialog(null, "Un error ocurrió.");
         }
         return newGrafo;
+    }
+
+    public Grafo openFileViaExplorer() {
+        try {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setCurrentDirectory(new File("."));
+            int result = fileChooser.showOpenDialog(null);
+            System.out.println("Result " + result);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                System.out.println(fileChooser.getSelectedFile().getAbsolutePath());
+                Grafo grafo = leerText(fileChooser.getSelectedFile().getAbsolutePath());
+                return grafo;
+            } else if (result == JFileChooser.CANCEL_OPTION) {
+                return null;
+
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+        return null;
+    }
+
+    public void printFileViaExplorer(Grafo grafo) {
+        try {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setCurrentDirectory(new File("."));
+            int result = fileChooser.showOpenDialog(null);
+            System.out.println("Result " + result);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                System.out.println(fileChooser.getSelectedFile().getAbsolutePath());
+                printText(fileChooser.getSelectedFile().getAbsolutePath(), grafo);
+            } else if (result == JFileChooser.CANCEL_OPTION) {
+                System.out.println("El programa no ha sido guardado.");
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 }
