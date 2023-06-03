@@ -4,7 +4,7 @@ public class Main {
     public static void main(String[] strings) {
         Grafo grafoPrueba = new Grafo();
         grafoPrueba.agregarVertice(1, "a");
-        grafoPrueba.agregarVertice(2, "b");
+        grafoPrueba.agregarVertice(2, "a");
         grafoPrueba.agregarVertice(3, "c");
         grafoPrueba.agregarVertice(4, "d");
         grafoPrueba.agregarVertice(5, "e");
@@ -31,9 +31,10 @@ public class Main {
         String a = grafoPrueba.findVertice("a").getUsername();
         System.out.println(a);
         TxtFile funciones = new TxtFile();
-        funciones.printFileViaExplorer(grafoPrueba);
+//        funciones.printFileViaExplorer(grafoPrueba);
         System.out.println("Flag");
         Grafo newGrafo = funciones.openFileViaExplorer();
+
         String name = newGrafo.getVertices()[0].getUsername();
         System.out.println(name);
         int numIslas = newGrafo.numIslas();

@@ -74,36 +74,39 @@ public class Grafo {
             numNodosActivos ++;
             numNodos++;
         } else {
-            int space = searchSpace();
-            if (space != -1) {
-                vertices[space] = newVertice;
-                newVertice.setNumVertice(space);
-                numNodosActivos++;
-            } else {
-                Vertice[] newVertices = new Vertice[numNodos + 1];
-                int[][] newMatrizAdy = new int[numNodos + 1][numNodos + 1];
-                for (int i = 0; i < numNodos; i++) {
-                    newVertices[i] = vertices[i];
-                    for (int j = 0; j < numNodos; j++) {
-                        newMatrizAdy[i][j] = getMatrizAd()[i][j];
-                        newMatrizAdy[j][i] = getMatrizAd()[j][i];
+            if (findVertice(userName) == null) {
+                int space = searchSpace();
+                if (space != -1) {
+                    vertices[space] = newVertice;
+                    newVertice.setNumVertice(space);
+                    numNodosActivos++;
+                } else {
+                    Vertice[] newVertices = new Vertice[numNodos + 1];
+                    int[][] newMatrizAdy = new int[numNodos + 1][numNodos + 1];
+                    for (int i = 0; i < numNodos; i++) {
+                        newVertices[i] = vertices[i];
+                        for (int j = 0; j < numNodos; j++) {
+                            newMatrizAdy[i][j] = getMatrizAd()[i][j];
+                            newMatrizAdy[j][i] = getMatrizAd()[j][i];
+                        }
                     }
+                    for (int j = 0; j < numNodos; j++) {
+                        newMatrizAdy[numNodos][j] = 0;
+                        newMatrizAdy[j][numNodos] = 0;
+                    }
+                    newVertices[numNodos] = newVertice;
+                    newVertice.setNumVertice(numNodos);
+                    setMatrizAd(newMatrizAdy);
+                    setVertices(newVertices);
+                    setVisited(new boolean[numNodos + 1]);
+                    visited[numNodos] = false;
+                    puentes = new boolean[numNodos + 1][numNodos + 1];
+                    numNodos++;
+                    numNodosActivos++;
                 }
-                for (int j = 0; j < numNodos; j++) {
-                    newMatrizAdy[numNodos][j] = 0;
-                    newMatrizAdy[j][numNodos] = 0;
-                }
-                newVertices[numNodos] = newVertice;
-                newVertice.setNumVertice(numNodos);
-                setMatrizAd(newMatrizAdy);
-                setVertices(newVertices);
-                setVisited(new boolean[numNodos + 1]);
-                visited[numNodos] = false;
-                puentes = new boolean[numNodos + 1][numNodos + 1];
-                numNodos++;
-                numNodosActivos++;
+            } else {
+                System.out.println("Este nombre de usuario ya está registrado");
             }
-
         }
     }
 
@@ -122,11 +125,12 @@ public class Grafo {
     }
 
     public void agregarArco(int n1,int n2, int peso){
-        if (getVertices()[n1] != null && getVertices()[n2] != null && n1 != n2) {
-            MatrizAd[n1][n2] = peso;
-            MatrizAd[n2][n1] = peso;
+        if (n2 < numNodos && n1 < numNodos) {
+            if (getVertices()[n1] != null && getVertices()[n2] != null && n1 != n2) {
+                MatrizAd[n1][n2] = peso;
+                MatrizAd[n2][n1] = peso;
+            }
         }
-
     }
 
     public void eliminarArco(int n1,int n2){
@@ -252,7 +256,6 @@ public class Grafo {
                 }
             }
         }
-        System.out.println("No pudimos encontrar ningún usuario con este nombre.");
         return null;
     }
 }
